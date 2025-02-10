@@ -1,0 +1,112 @@
+[tool.poetry]
+name = "k8s-agent"
+version = "0.0.1"
+description = "K8s Agent"
+license = "MIT"
+readme = "README.md"
+packages = [{include = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "0.110.0"
+uvicorn = {extras = ["standard"], version = "^0.27.0"}
+
+pydantic = "^2.10.4"
+[tool.poetry.group.dev.dependencies]
+black = "^22.12.0"
+pre-commit = "^2.21.0"
+commitizen = "^3.5.3"
+pytest = "^7.4.0"
+pyclean = "^2.7.4"
+ruff = "0.1.15"
+
+
+[tool.ruff]
+# Allow lines to be as long as 120.
+line-length = 120
+
+
+[tool.ruff.lint]
+select = [
+    "D",      # pydocstyle
+    "W",      # pycodestyle warnings
+    "E",      # pycodestyle errors
+    "N",      # pep8-naming
+    "I",      # isort
+    "ANN001", # Missing type annotation for function argument
+    "ANN2",   # Missing type annotation for return value
+    "F",      # Pyflakes
+    "UP",     # pyupgrade
+    "RUF",    # Ruff checks
+    "A",      # flake8-builtins (shadowing a Python builtin)
+    "B",      # flake8-bugbear
+    "C4",     # flake8-comprehensions
+    "SIM",    # flake8-simplify
+    "Q",      # flake8-quotes
+    "PIE",    # flake8-pie
+    "T10",    # flake8-debugger
+    "TCH",    # flake8-type-checking
+    "TID",    # flake8-tidy-imports
+    "EXE",    # flake8-executable
+    "G",      # flake8-logging-format
+    "INT",    # flake8-gettext
+    "ISC",    # flake8-implicit-str-concat
+    "FLY",    # flynt
+    "NPY",    # NumPy-specific rules
+    "PD",     # pandas-vet
+    "PERF",   # Perflint
+    "PGH",    # pygrep-hooks
+]
+
+ignore = [
+    "PGH002", # duplicate with G010
+    "PGH003", # we want to just use `type: ignore`
+    "TID252", # relative imports
+    "N815",
+    "UP007",  # Use `X | Y` for type annotations
+]
+
+[tool.ruff.lint.per-file-ignores]
+# # Ignore `F401` (unused imports) in all `__init__.py` files.
+"__init__.py" = ["F401"]
+
+[tool.ruff.lint.pydocstyle]
+# Use Google docstring style.
+convention = "google"
+
+[tool.ruff.lint.flake8-annotations]
+# Suppress type annotations for none-returning functions.
+suppress-none-returning = true
+
+[tool.ruff.format]
+# Disable the ruff formatter for this project.
+exclude = ["*"]
+# Line endings will be converted to `\n`.
+line-ending = "lf"
+
+[tool.ruff.pep8-naming]
+# Allow Pydantic's `@validator` decorator to trigger class method treatment.
+classmethod-decorators = ["classmethod", "pydantic.validator", "pydantic.root_validator"]
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+tag_format = "$version"
+version_scheme = "semver"
+version_provider = "poetry"
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+start = "src.main:start"
+
+[tool.black]
+line-length = 80
+
+[tool.isort]
+line_length = 80
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true

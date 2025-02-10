@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: fortio-load-generator
+spec:
+  schedule: "*/5 * * * *"  # Runs every 5 minutes
+  concurrencyPolicy: Replace  # Replace existing job if it's still running
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: fortio-load
+            image: fortio/fortio:latest
+            command: 
+            - fortio
+            - load
+            - -c
+            - "3"
+            - -qps
+            - "10"
+            - -t
+            - "4m"
+            - http://productpage:9080/productpage
+          restartPolicy: OnFailure 

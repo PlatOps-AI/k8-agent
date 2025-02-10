@@ -1,0 +1,94 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: k8s-agent
+  namespace: default
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: pod-replica-viewer
+  namespace: default
+rules:
+  - apiGroups: ['apps', '']
+    resources: 
+      - 'deployments'
+      - 'replicasets'
+      - 'pods'
+      - 'pods/exec'
+      - 'pods/log'
+      - 'services'
+      - 'namespaces'
+      - 'events'
+    verbs: ['get', 'list', 'watch', 'create', 'update', 'patch']
+  - apiGroups: ['autoscaling']
+    resources: ['horizontalpodautoscalers']
+    verbs: ['get', 'list', 'watch', 'create', 'update', 'patch']
+  - apiGroups: ['batch']
+    resources: ['jobs', 'cronjobs']
+    verbs: ['get', 'list', 'watch']
+  - apiGroups: ['networking.k8s.io']
+    resources: ['ingresses']
+    verbs: ['get', 'list', 'watch']
+  - apiGroups: ['metrics.k8s.io']
+    resources: ['pods', 'nodes']
+    verbs: ['get', 'list', 'watch']
+  - apiGroups: ['']
+    resources: 
+      - 'componentstatuses'
+      - 'nodes'
+    verbs: ['get', 'list', 'watch']
+  - apiGroups: ['']
+    resources: 
+      - 'configmaps'
+      - 'secrets'
+    verbs: ['get', 'list', 'watch']
+  - apiGroups: ['']
+    resources: 
+      - 'persistentvolumes'
+      - 'persistentvolumeclaims'
+    verbs: ['get', 'list', 'watch']
+  - apiGroups: ['monitoring.coreos.com']
+    resources: ['servicemonitors']
+    verbs: ['get', 'list', 'watch']
+  - apiGroups: ['apiextensions.k8s.io']
+    resources: ['customresourcedefinitions']
+    verbs: ['get', 'list', 'watch']
+  - apiGroups: ['apps']
+    resources: ['statefulsets']
+    verbs: ['get', 'list', 'watch', 'create', 'update', 'patch']
+  - apiGroups: ['']
+    resources: ['endpoints']
+    verbs: ['get', 'list', 'watch']
+  - apiGroups: ['apps']
+    resources: ['daemonsets']
+    verbs: ['get', 'list', 'watch']
+  - apiGroups: ['rbac.authorization.k8s.io']
+    resources: 
+      - 'roles'
+      - 'rolebindings'
+      - 'clusterroles'
+      - 'clusterrolebindings'
+    verbs: ['get', 'list', 'watch']
+  - apiGroups: ['networking.k8s.io']
+    resources: 
+      - 'networkpolicies'
+      - 'ingressclasses'
+    verbs: ['get', 'list', 'watch']
+  - apiGroups: ['policy']
+    resources: ['poddisruptionbudgets']
+    verbs: ['get', 'list', 'watch']
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: pod-replica-viewer-binding
+  namespace: default
+subjects:
+  - kind: ServiceAccount
+    name: k8s-agent # replace with name of your service account
+    namespace: default
+roleRef:
+  kind: ClusterRole
+  name: pod-replica-viewer
+  apiGroup: rbac.authorization.k8s.io
