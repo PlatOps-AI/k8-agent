@@ -1,0 +1,13 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: products-page-restart-rolebinding
+  namespace: default
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: products-page-restart-role
+subjects:
+- kind: ServiceAccount
+  name: products-page-restart-cronjob
+  namespace: default

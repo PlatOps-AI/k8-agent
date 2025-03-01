@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: busybox-crash
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: busybox-crash
+  template:
+    metadata:
+      labels:
+        app: busybox-crash
+    spec:
+      containers:
+      - name: busybox
+        image: busybox
+        command: ['nslookup', 'products-page']

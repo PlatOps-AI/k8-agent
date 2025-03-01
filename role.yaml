@@ -1,0 +1,10 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: products-page-restart-role
+  namespace: default
+rules:
+- apiGroups: ["apps", ""]
+  resources: ["deployments", "pods"]
+  verbs: ["get", "list", "patch", "update"]
+  resourceNames: ["products-page-deployment"] # Replace with actual deployment name if needed

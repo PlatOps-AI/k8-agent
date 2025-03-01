@@ -1,0 +1,19 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: products-page-restart
+  namespace: default
+spec:
+  schedule: "0 */6 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: products-page-restart-cronjob
+          containers:
+          - name: restart-job
+            image: bitnami/kubectl:latest
+            command: ["/bin/sh", "-c"]
+            args:
+            - kubectl rollout restart deployment/products-page-deployment -n default # Replace with actual deployment name and namespace if needed
+          restartPolicy: OnFailure
